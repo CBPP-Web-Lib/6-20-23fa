@@ -1,0 +1,1 @@
+docker exec 6-20-23fa-watch node $1

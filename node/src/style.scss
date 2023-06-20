@@ -1,0 +1,27 @@
+
+#fa6-20-23 {
+    max-width:800px;
+    svg {background-color: #0c61a4;}
+    text {
+        font-family:"Proxima Nova Condensed",sans-serif;
+    }
+    foreignObject p {
+        color:#fff;
+        font-family:"Proxima Nova Condensed",sans-serif;
+        display:block;
+        width:100%;
+        height:auto;
+        font-size:2pt;
+        line-height:2.5pt;
+        text-align:left;
+        margin:0;
+        transition: opacity 0.2s;
+    }
+    g.person circle {
+        transition: fill 2s;
+    }
+    .fade-until-end,
+    .fade-before-end {
+        transition: opacity 0.5s;
+    }
+}
