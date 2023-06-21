@@ -1,13 +1,17 @@
 
+$dark-blue:#0A5087;
+$yellow:#FFCE6D;
+
 #fa6-20-23 {
     max-width:800px;
-    svg {background-color: #0c61a4;}
-    text {
-        font-family:"Proxima Nova Condensed",sans-serif;
+    svg {background-color: $dark-blue;}
+    g.main-g {
+        transition: opacity 0.2s;
     }
+    font-family:"proxima-nova-condensed",sans-serif;
     foreignObject p {
         color:#fff;
-        font-family:"Proxima Nova Condensed",sans-serif;
+        font-family:"proxima-nova-condensed",sans-serif;
         display:block;
         width:100%;
         height:auto;
@@ -18,7 +22,7 @@
         transition: opacity 0.2s;
     }
     g.person circle {
-        transition: fill 2s;
+        transition: fill 2s, fill-opacity 2s;
     }
     .fade-until-end,
     .fade-before-end {
