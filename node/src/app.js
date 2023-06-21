@@ -8,7 +8,7 @@ const figure = require("cbpp_figure")($);
 import * as d3 from "d3";
 import {forceSimulation} from "d3-force";
 import forceBoundary from "d3-force-boundary";
-console.log(forceSimulation);
+const seedrandom = require("seedrandom");
 
 const id = "fa6-20-23";
 const sel = "#" + id;
@@ -16,6 +16,7 @@ const script_id = "script_" + id;
 const script_sel = "#" + script_id;
 const script_url = document.getElementById(script_id).src.split("?")[0];
 const url_base = script_url.replace(/js\/app[\.min]*\.js/g,"");
+const rng = new seedrandom(3);
 const shareable_fonts = document.createElement("link");
 shareable_fonts.setAttribute("rel","stylesheet");
 shareable_fonts.setAttribute("href", "https://use.typekit.net/nnt7xeb.css");
@@ -47,8 +48,8 @@ Promise.all([
 
   var dot_model = [];
   data.forEach((row)=>{
-    var r = Math.random()*0.5;
-    var theta = Math.random()*2*Math.PI;
+    var r = rng()*0.5;
+    var theta = rng()*2*Math.PI;
     var x = r*Math.cos(theta);
     var y = r*Math.sin(theta);
     y += 0.6;
@@ -56,7 +57,7 @@ Promise.all([
     var p = {x, y};
     p.worked = row[0];
     p.working = row[0];
-    p.timeOffset = Math.random();
+    p.timeOffset = rng();
     p.data = row;
     dot_model.push(p);
   });
@@ -68,7 +69,6 @@ Promise.all([
     return y*viewWidth - (viewWidth - viewHeight)/2;
   }
 
-  const container = $(sel);
   const viewWidth = 90;
   const viewMargin = 2;
   const viewHeight = 100/1.91 - viewMargin*2;
@@ -224,7 +224,10 @@ Promise.all([
   }
 
   const boundary_force = forceBoundary(-1, 0.53, 2, 0.7)
-    .strength(0.05)
+    .strength(0.05);
+  
+  const boundary_force_end = forceBoundary(-1, 0.49, 2, 0.7)
+    .strength(0.05);
 
   const working_groups = function(p) {
     var center = [0.15,0.6];
@@ -233,17 +236,14 @@ Promise.all([
     }
     return center;
   }
-  setTimeout(function() {
-    svg.style("opacity", 1);
-  }, 100);
-  const initial_simulation = forceSimulation(dot_model)
-    .force("force_center", force_to_center(2, working_groups).force)
-    //.force("boundary_force", boundary_force)
-    .force("collide", d3.forceCollide(dot_size*1.4))
-    .stop()
-    .alphaDecay(0)
-    .tick(2000)
-    .stop();
+
+  const final_center = force_to_center(5, function(p) {
+    var center = [0.1,0.55];
+    if (p.worked) {
+      center = [0.87,0.6];
+    }
+    return center;
+  })
 
   var dot_layer = svg.append("g")
     .attr("class","dots");
@@ -274,91 +274,98 @@ Promise.all([
       })
   }
 
-  /*initial_simulation
-    .on("tick", tick_update);
-  
-  return;*/
+  var main_simulation;
 
-
-  
-  dot_model.forEach((dot)=>{
-    dot.vx = 0;
-    dot.vy = 0 ;
-    console.log(dot);
-  });
-
-  const main_simulation = forceSimulation(dot_model)
-    .force("force_center", force_to_center(10, working_groups).force)
-    .force("boundary_force", boundary_force)
-    .force("collide", d3.forceCollide(dot_size*1.4))
-    .alphaDecay(0);
-
-  var alpha = 0.0;
-  var alpha_increase = setInterval(function() {
-    alpha += 0.0001;
-    if (alpha > 0.01) {
-      clearInterval(alpha_increase);
-      s1.style("opacity", 1);
-      svg.selectAll("g.person circle").attr("fill-opacity", 1);
-      working_label.attr("opacity", 1);
-      not_working_label.attr("opacity", 1);
-    }
-    main_simulation.alpha(alpha);
-    main_simulation.restart();
-  }, 10)
-
-  main_simulation.on("tick", tick_update);
-
-  
-  var month = 0;
-  function move_people() {
-    month+=0.02;
-    dot_model.forEach((person)=>{
-      var person_month = Math.floor(month - person.timeOffset) + 1;
-      person.working = person.data[person_month];
-      person.worked = person.worked || person.working;
+  Promise.resolve().then(function() {
+    return new Promise((resolve)=>{ 
+      main_simulation = forceSimulation(dot_model)
+        .force("force_center", force_to_center(10, working_groups).force)
+        .force("boundary_force", boundary_force)
+        .force("collide", d3.forceCollide(dot_size*1.4))
+        .alphaDecay(0)
+        .alpha(0.01)
+        .stop()
+        .tick(2000);
+      main_simulation.restart();
+      main_simulation.on("tick", tick_update);
+      resolve();
+    })
+  }).then(function() {
+    return new Promise((resolve)=> {
+      setTimeout(resolve, 100);
+    })
+  }).then(function() {
+    return new Promise((resolve)=>{
+      svg.style("opacity", 1);
+      resolve();
+    })
+  }).then(function() {
+    return new Promise((resolve)=>{
+      var alpha = 0.0;
+      var alpha_increase = setInterval(function() {
+        alpha += 0.0001;
+        if (alpha > 0.01) {
+          clearInterval(alpha_increase);
+          s1.style("opacity", 1);
+          svg.selectAll("g.person circle").attr("fill-opacity", 1);
+          working_label.attr("opacity", 1);
+          not_working_label.attr("opacity", 1);
+          resolve();
+        }
+        main_simulation.alpha(alpha);
+        main_simulation.restart();
+      }, 10)
     });
-    if (month >= 12) {
-      clearInterval(month_timer);
-      setTimeout(function() {
-        main_simulation.stop();
-        svg.selectAll(".fade-until-end")
-          .attr("opacity", 1);
-        svg.selectAll(".fade-before-end")
-          .attr("opacity", 0);
-        final_simulation.restart();
-        s3.style("opacity", 1);
-        setTimeout(function() {
-          svg.style("opacity",0);
-        }, 5000);
-      }, 2000);
-    }
-  }
-  
-  var month_timer;
-  setTimeout(function() {
-    month_timer = setInterval(move_people, 20);
-    s2.style("opacity", 1);
-    legend.attr("opacity", 1);
-  }, 6000);
+  }).then(function() {
+    return new Promise((resolve)=>{
+      setTimeout(resolve, 3800);
+    })
+  }).then(function() {
+    return new Promise((resolve)=>{
+      var month = 0;
+      function move_people() {
+        month+=0.02;
+        dot_model.forEach((person)=>{
+          var person_month = Math.floor(month - person.timeOffset) + 1;
+          person.working = person.data[person_month];
+          person.worked = person.worked || person.working;
+        });
+        if (month >= 12) {
+          clearInterval(month_timer);
+          resolve();
+        }
+      }
+      var month_timer = setInterval(move_people, 20);
+      s2.style("opacity", 1);
+      legend.attr("opacity", 1);
+    })
+  }).then(function() {
+    return new Promise((resolve)=>{
+      setTimeout(resolve, 4000);
+    })
+  }).then(function() {
+    main_simulation.stop();
+    svg.selectAll(".fade-until-end")
+      .attr("opacity", 1);
+    svg.selectAll(".fade-before-end")
+      .attr("opacity", 0);
+    var final_simulation = forceSimulation(dot_model)
+      .force("to_group", final_center.force)
+      .force("collide", d3.forceCollide(dot_size*1.4))
+      .force("boundary_force", boundary_force_end)
+      .alpha(0.03)
+      .alphaDecay(0);
 
-  var final_center = force_to_center(5, function(p) {
-    var center = [0.1,0.55];
-    if (p.worked) {
-      center = [0.87,0.6];
-    }
-    return center;
+    final_simulation.on("tick", tick_update);
+    s3.style("opacity", 1);
+  }).then(function() {
+    return new Promise((resolve)=>{
+      setTimeout(resolve, 5000);
+    })
+  }).then(function() {
+    return new Promise((resolve)=>{
+      svg.style("opacity",0);
+      resolve();
+    })
   })
-
-  var final_simulation = forceSimulation(dot_model)
-    .force("to_group", final_center.force)
-    .force("collide", d3.forceCollide(dot_size*1.3))
-    .force("boundary_force", boundary_force)
-    .alpha(0.03)
-    .alphaDecay(0)
-    .stop();
-
-  final_simulation.on("tick", tick_update);
-
-
 })

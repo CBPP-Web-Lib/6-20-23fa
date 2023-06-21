@@ -1,1 +1,1 @@
-docker-compose run --entrypoint "npm install d3-force-boundary" node-watch
+docker-compose run --entrypoint "npm install" node-watch

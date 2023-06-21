@@ -25,6 +25,7 @@
     "js-toggle-switch": "^1.0.1",
     "papaparse": "^5.4.1",
     "regenerator-runtime": "^0.13.7",
+    "seedrandom": "^3.0.5",
     "tablesorter": "^2.31.3",
     "topojson": "^3.0.2",
     "twig": "^1.15.2",
