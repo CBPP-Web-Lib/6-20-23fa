@@ -3,12 +3,27 @@ $dark-blue:#0A5087;
 $yellow:#FFCE6D;
 
 #fa6-20-23 {
-    max-width:800px;
-    svg {background-color: $dark-blue;}
+    max-width:580px;
+    //svg {background-color: $dark-blue;}
     g.main-g {
         transition: opacity 0.2s;
     }
     font-family:"proxima-nova-condensed",sans-serif;
+    h1, h2, h3, h4, h5, h6 {
+        color:#000;
+    }
+    h2.figure-title {
+        font-family: "proxima-nova",sans-serif;
+        font-size:24px;
+        line-height:1;
+        margin-bottom:0.5em;
+    }
+    h3.figure-subtitle {
+        margin-top:0;
+        font-weight:400;
+        font-size:19px;
+        line-height:1;
+    }
     foreignObject p {
         color:#fff;
         font-family:"proxima-nova-condensed",sans-serif;
@@ -21,11 +36,43 @@ $yellow:#FFCE6D;
         margin:0;
         transition: opacity 0.2s;
     }
+    g.timeline {
+        transition: opacity 0.2s;
+    }
     g.person circle {
         transition: fill 2s, fill-opacity 2s;
     }
     .fade-until-end,
     .fade-before-end {
         transition: opacity 0.5s;
+    }
+    .explanation {
+        font-family:"proxima-nova",sans-serif;
+        p {
+            font-size:11pt; 
+            margin:0;
+            margin-bottom:0.3em;
+            line-height:1.3;
+            text-align:center;
+        }
+    }
+    .legend {
+        padding:10px;
+        background-color: #f0f0f0;
+        margin-bottom:10px;
+        .legend-line-item {
+            display:inline-block;
+            padding-left:10px;
+            padding-right:10px;
+        } 
+        .legend-circle {
+            display:inline-block;
+            vertical-align: middle;
+        }
+        .legend-circle > svg {
+            width:18px;
+            height:18px;
+            display:inline-block;
+        }
     }
 }
