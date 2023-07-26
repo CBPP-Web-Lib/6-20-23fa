@@ -18,7 +18,7 @@ services:
             context: .
             dockerfile: services/apache/Dockerfile
         ports:
-            - "8082:80"
+            - "8080:80"
         container_name: 6-20-23fa-dev
     apache-prod:
         volumes:
@@ -29,5 +29,5 @@ services:
             context: .
             dockerfile: services/apache/Dockerfile
         ports:
-            - "8083:80"
+            - "8081:80"
         container_name: 6-20-23fa-prod
