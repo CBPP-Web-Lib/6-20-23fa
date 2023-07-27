@@ -12,9 +12,57 @@ import {
 import { setup_svg_text } from "./svg_text"
 import { select } from "d3"
 import { force_to_center, boundary_force, collision_force } from "./forces"
-import { groupLabel } from "./group_labels"
 
 const d3 = { select }
+
+function initialize_dots(data) {
+  var dot_model = [];
+  var rng = new seedrandom(3)
+  data.forEach((row) => {
+    var r = rng() * 0.5;
+    var theta = rng() * 2 * Math.PI;
+    var x = r * Math.cos(theta);
+    var y = r * Math.sin(theta);
+    y += 0.6;
+    x += (row[0] === 0 ? 0.15 : 0.85);
+    var p = {
+      x,
+      y
+    };
+    p.worked = row[0];
+    p.working = row[0];
+    p.months_since_work = -1;
+    if (p.working) {
+      p.months_since_work = 0;
+    }
+    p.timeOffset = rng();
+    p.data = row;
+    dot_model.push(p);
+  });
+  return dot_model;
+}
+
+function get_effective_month(month) {
+  var floors = [13, 12, 9, 6, 3, 1];
+  if (month === -1) {
+    return 24;
+  }
+  var effective_month = floors[0];
+  floors.forEach((floor) => {
+    if (month < floor) {
+      effective_month = floor;
+    }
+  })
+  return effective_month;
+}
+
+const working_groups = function(p) {
+  var center = [0.15, 0.7];
+  if (p.working) {
+    center = [0.85, 0.7];
+  }
+  return center;
+}
 
 function run_animation(svg) {
 
@@ -164,29 +212,21 @@ function run_animation(svg) {
       svg.select("g.timeline").style("opacity", 0);
       Object.keys(x_loc).forEach((key) => {
         var text = "Didn't work within a year";
-        if (key==12) {
+        if (key == 12) {
           text = "Worked within a year";
         }
-        /*if (!isNaN(key * 1)) {
-          text = "Worked in past " + key + " months";
-        }
-        if (key * 1 === 1) {
-          text = "Worked in past month";
-        }*/
         var x = vx(x_loc[key]);
         var y = vy(0.88);
         svg.append("text")
           .text(text)
           .attr("text-anchor", "middle")
           .attr("transform-origin", [x, y].join(" "))
-          //.attr("transform", "rotate(-45)")
           .attr("font-size", 3)
           .attr("x", x)
           .attr("y", y)
         svg.append("text")
           .attr("text-anchor", "middle")
           .attr("transform-origin", [x, y].join(" "))
-          //.attr("transform", "rotate(-45)")
           .attr("font-size", 3.5)
           .attr("x", x + 1)
           .attr("y", y + 4)
@@ -194,52 +234,7 @@ function run_animation(svg) {
       })
       setTimeout(resolve, 2100);
     })
-  })/*.then(function() {
-    return new Promise((resolve) => {
-      groupLabel({
-        text: "51% worked in the past month",
-        left: 0.83,
-        duration: 0
-      })
-      setTimeout(resolve, 3000);
-    })
   }).then(function() {
-    return new Promise((resolve) => {
-      groupLabel({
-        text: "59% worked within the past three months",
-        left: 0.68,
-        duration: 500
-      })
-      setTimeout(resolve, 3000);
-    })
-  }).then(function() {
-    return new Promise((resolve) => {
-      groupLabel({
-        text: "63% worked within the past six months",
-        left: 0.53,
-        duration: 500
-      })
-      setTimeout(resolve, 3000);
-    })
-  }).then(function() {
-    return new Promise((resolve) => {
-      groupLabel({
-        text: "68% worked within the past nine months",
-        left: 0.38,
-        duration: 500
-      })
-      setTimeout(resolve, 3000);
-    })
-  }).then(function() {
-    return new Promise((resolve) => {
-      groupLabel({
-        text: "74% worked within the past year.",
-        left: 0.23,
-        duration: 500
-      })
-      setTimeout(resolve, 9000);
-    })
-  })*/.then(function() {
     return new Promise((resolve) => {
       setTimeout(resolve, 9000);
     })
@@ -262,57 +257,7 @@ function run_animation(svg) {
     run_animation(svg);
   })
 
-  
 }
 
-function get_effective_month(month) {
-  var floors = [13, 12, 9, 6, 3, 1];
-  if (month === -1) {
-    return 24;
-  }
-  var effective_month = floors[0];
-  floors.forEach((floor) => {
-    if (month < floor) {
-      effective_month = floor;
-    }
-  })
-  return effective_month;
-}
-
-const working_groups = function(p) {
-  var center = [0.15, 0.7];
-  if (p.working) {
-    center = [0.85, 0.7];
-  }
-  return center;
-}
-
-function initialize_dots(data) {
-  var dot_model = [];
-  var rng = new seedrandom(3)
-  data.forEach((row) => {
-    var r = rng() * 0.5;
-    var theta = rng() * 2 * Math.PI;
-    var x = r * Math.cos(theta);
-    var y = r * Math.sin(theta);
-    y += 0.6;
-    x += (row[0] === 0 ? 0.15 : 0.85);
-    var p = {
-      x,
-      y
-    };
-    p.worked = row[0];
-    p.working = row[0];
-    p.months_since_work = -1;
-    if (p.working) {
-      p.months_since_work = 0;
-    }
-    p.timeOffset = rng();
-    //p.timeOffset = 0;
-    p.data = row;
-    dot_model.push(p);
-  });
-  return dot_model;
-}
 
 export { run_animation }
