@@ -154,7 +154,6 @@ function run_animation(svg) {
       svg.selectAll(".fade-before-end")
         .attr("opacity", 0);
       var { aggregate_data, x_loc } = aggregate_dot_model(dot_model);
-      console.log(aggregate_data);
       svg.selectAll("g.person").each(function(d) {
         var circle = d3.select(this).select("circle");
         circle.transition()
@@ -165,7 +164,6 @@ function run_animation(svg) {
       svg.select("g.timeline").style("opacity", 0);
       Object.keys(x_loc).forEach((key) => {
         var text = "Didn't work within a year";
-        console.log(key)
         if (key==12) {
           text = "Worked within a year";
         }

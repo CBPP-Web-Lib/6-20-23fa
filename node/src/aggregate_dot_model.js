@@ -28,15 +28,15 @@ function aggregate_dot_model(model) {
     };
     var y = 0.82;
     Object.keys(r).forEach((group)=>{
-        var x_off = -0.1, y_off = 0;
+        var x_off = -0.13, y_off = 0;
         r[group].forEach((person)=>{
             person.x_targ = x_loc[group] + x_off;
             person.y_targ = y + y_off;
-            if (x_off < 0.124) {
-                x_off += 0.025
+            if (x_off < 0.132) {
+                x_off += 0.03
             } else {
-                x_off = -0.1;
-                y_off -= 0.025;
+                x_off = -0.13;
+                y_off -= 0.03;
             }
         })
     })
