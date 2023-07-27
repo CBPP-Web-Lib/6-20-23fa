@@ -1,3 +1,5 @@
+/*not part of webpack bundle - run this directly to generate a data.txt file*/
+
 const fs = require("fs");
 
 /*originally we were going to generate artifical microdata that matches
@@ -134,9 +136,21 @@ function is_good(agg) {
 
 function write_data(people) {
     var r = [];
+    var bitstring = [];
     people.forEach((person) => {
         r.push(person.work_in_month.join(""));
+        bitstring.push(to_byte(person.work_in_month));
     })
-    var text = r.join("\n");
-    fs.writeFileSync("./data.txt", text);
+    fs.writeFileSync("./data.json", JSON.stringify(bitstring));
+}
+
+function to_byte(arr) {
+    var val = 0;
+    if (arr.length !== 24) {
+        throw "bad array length";
+    }
+    for (var i = 0; i <24; i++) {
+        val += Math.pow(2, 23 - i)*arr[i]
+    }
+    return val;
 }
