@@ -23,7 +23,7 @@ const force_to_center = function(strength, center_assign, dot_model) {
   return new ForceToCenter();
 }
 
-const boundary_force = forceBoundary(-1, 0.53, 2, 0.9)
+const boundary_force = forceBoundary(-1, 0.6, 2, 0.9)
   .strength(0.05);
 
 const collision_force = forceCollide(dot_size * 1.4)

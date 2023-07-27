@@ -32,24 +32,24 @@ function run_animation(svg) {
     .attr("class", "person")
     .each(function(d) {
       var effective_month = get_effective_month(d.months_since_work);
+      var color = effective_month > 12 ? "rgba(204, 204, 204, 1)" : "rgb(12, 97, 164, " + (1 - effective_month/16) + ")"
       d3.select(this).append("circle")
         .attr("cx", vx(d.x))
         .attr("cy", vy(d.y))
         .attr("r", vx(dot_size) - vx(0))
-        .attr("fill", effective_month > 12 ? "#cccccc" : "#0c61a4")
+        .attr("fill", color)
         .attr("stroke-width", 0)
-        .attr("fill-opacity", effective_month > 12 ? 1 : 1 - effective_month / 16)
     })
 
   const tick_update = function() {
     svg.selectAll("g.person")
       .each(function(d) {
         var effective_month = get_effective_month(d.months_since_work);
+        var color = effective_month > 12 ? "rgba(204, 204, 204, 1)" : "rgb(12, 97, 164, " + ( 1 - effective_month/16) + ")"
         d3.select(this).select("circle")
           .attr("cx", vx(d.x))
           .attr("cy", vy(d.y))
-          .attr("fill", effective_month > 12 ? "#cccccc" : "#0c61a4")
-          .attr("fill-opacity", effective_month > 12 ? 1 : 1 - effective_month / 16)
+          .attr("fill", color)
       })
   }
 
@@ -96,27 +96,31 @@ function run_animation(svg) {
   }).then(function() {
     return new Promise((resolve) => {
       var month = 0;
-
       function move_people() {
-        month += 0.025;
-        month = Math.min(12, month);
+        var speed = Math.min(0.05, 0.05*2*month);
+        speed = Math.min(speed, 0.05*2*(24 -month));
+        speed = Math.max(0.001, speed);
+        month += speed;
+        month = Math.min(24, month);
         svg.select("circle.timeline-indicator")
-          .attr("cx", vx(month / 12))
+          .attr("cx", vx(month / 24))
         svg.select("line.line-timeline")
-          .attr("x2", vx(month / 12));
+          .attr("x2", vx(month / 24));
         dot_model.forEach((person) => {
-          var person_month = Math.min(11, Math.floor(month + person.timeOffset));
-          person.working = person.data[person_month];
+          var person_month = Math.min(24, Math.floor(month + person.timeOffset));
+          if (person_month < person.data.length) {
+            person.working = person.data[person_month];
+          }
           if (person.working) {
             person.months_since_work = 0;
           } else {
             if (person.months_since_work >= 0) {
-              person.months_since_work += 0.025;
+              person.months_since_work += speed;
             }
           }
           person.worked = person.worked || person.working;
         });
-        if (month >= 12) {
+        if (month >= 24) {
           clearInterval(month_timer);
           resolve();
         }
@@ -150,6 +154,7 @@ function run_animation(svg) {
       svg.selectAll(".fade-before-end")
         .attr("opacity", 0);
       var { aggregate_data, x_loc } = aggregate_dot_model(dot_model);
+      console.log(aggregate_data);
       svg.selectAll("g.person").each(function(d) {
         var circle = d3.select(this).select("circle");
         circle.transition()
@@ -159,35 +164,39 @@ function run_animation(svg) {
       })
       svg.select("g.timeline").style("opacity", 0);
       Object.keys(x_loc).forEach((key) => {
-        var text = "Didn't work";
-        if (!isNaN(key * 1)) {
+        var text = "Didn't work within a year";
+        console.log(key)
+        if (key==12) {
+          text = "Worked within a year";
+        }
+        /*if (!isNaN(key * 1)) {
           text = "Worked in past " + key + " months";
         }
         if (key * 1 === 1) {
           text = "Worked in past month";
-        }
+        }*/
         var x = vx(x_loc[key]);
-        var y = vy(0.78);
+        var y = vy(0.88);
         svg.append("text")
           .text(text)
-          .attr("text-anchor", "end")
+          .attr("text-anchor", "middle")
           .attr("transform-origin", [x, y].join(" "))
-          .attr("transform", "rotate(-45)")
-          .attr("font-size", 2.5)
+          //.attr("transform", "rotate(-45)")
+          .attr("font-size", 3)
           .attr("x", x)
           .attr("y", y)
         svg.append("text")
-          .attr("text-anchor", "end")
+          .attr("text-anchor", "middle")
           .attr("transform-origin", [x, y].join(" "))
-          .attr("transform", "rotate(-45)")
-          .attr("font-size", 3)
+          //.attr("transform", "rotate(-45)")
+          .attr("font-size", 3.5)
           .attr("x", x + 1)
-          .attr("y", y + 2.5)
+          .attr("y", y + 4)
           .text(Math.round(aggregate_data[key].length) + "%")
       })
       setTimeout(resolve, 2100);
     })
-  }).then(function() {
+  })/*.then(function() {
     return new Promise((resolve) => {
       groupLabel({
         text: "51% worked in the past month",
@@ -232,6 +241,10 @@ function run_animation(svg) {
       })
       setTimeout(resolve, 9000);
     })
+  })*/.then(function() {
+    return new Promise((resolve) => {
+      setTimeout(resolve, 9000);
+    })
   }).then(function() {
     return new Promise((resolve) => {
       svg.style("opacity", 0);
@@ -255,7 +268,7 @@ function run_animation(svg) {
 }
 
 function get_effective_month(month) {
-  var floors = [12, 9, 6, 3, 1];
+  var floors = [13, 12, 9, 6, 3, 1];
   if (month === -1) {
     return 24;
   }

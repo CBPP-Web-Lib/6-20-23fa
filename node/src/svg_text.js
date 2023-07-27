@@ -10,7 +10,7 @@ function setup_svg_text(svg) {
 
   labels.append("text")
     .attr("class", "fade-before-end")
-    .text("Not working")
+    .text("Not currently working")
     .attr("x", vx(0.2))
     .attr("y", vy(0.55))
     .attr("opacity", 1)
@@ -20,7 +20,7 @@ function setup_svg_text(svg) {
 
   labels.append("text")
     .attr("class", "fade-before-end")
-    .text("Working")
+    .text("Currently working")
     .attr("x", vx(0.8))
     .attr("y", vy(0.55))
     .attr("opacity", 1)
@@ -32,26 +32,64 @@ function setup_svg_text(svg) {
     .attr("class", "timeline")
     .style("opacity", 1);
 
-  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"];
+  var months = ["Jan", "Mar","May","Jul","Sep","Nov","Jan","Mar","May","Jul","Sep","Nov"]
   
   months.forEach((month, i) => {
     timeline.append("text")
       .attr("class", "month-label")
-      .attr("text-anchor", "middle")
-      .attr("x", vx(i / 12))
+      .attr("text-anchor", "left")
+      .attr("x", vx((i+0.1) / 12))
       .attr("y", vy(0.42))
       .attr("fill", "#000")
-      .attr("font-size", "2")
+      .attr("font-size", "2.5")
       .text(month);
   })
+
+  timeline.append("line")
+    .attr("stroke-width",0.15)
+    .attr("x1", vx(0.5))
+    .attr("x2", vx(0.5))
+    .attr("y1", vy(0.4))
+    .attr("y2", vy(0.47))
+    .attr("stroke","#000");
+
+  timeline.append("line")
+    .attr("stroke-width",0.15)
+    .attr("x1", vx(0))
+    .attr("x2", vx(0))
+    .attr("y1", vy(0.4))
+    .attr("y2", vy(0.435))
+    .attr("stroke","#000");
+
+  timeline.append("line")
+    .attr("stroke-width",0.15)
+    .attr("x1", vx(1))
+    .attr("x2", vx(1))
+    .attr("y1", vy(0.4))
+    .attr("y2", vy(0.435))
+    .attr("stroke","#000");
+
+  timeline.append("text")
+    .attr("x", vx(0.49))
+    .attr("y", vy(0.465))
+    .text("◄ First year")
+    .attr("font-size","2.5")
+    .attr("text-anchor","end");
+
+  timeline.append("text")
+    .attr("x", vx(0.51))
+    .attr("y", vy(0.465))
+    .text("Second year ►")
+    .attr("font-size","2.5")
+    .attr("text-anchor","start");
   
   timeline.append("line")
     .attr("stroke-width", 0.15)
     .attr("class", "line-timeline")
     .attr("x1", vx(0))
     .attr("x2", vx(0))
-    .attr("y1", vy(0.44))
-    .attr("y2", vy(0.44))
+    .attr("y1", vy(0.435))
+    .attr("y2", vy(0.435))
     .attr("stroke", "#000");
   
     timeline.append("circle")
@@ -60,7 +98,7 @@ function setup_svg_text(svg) {
     .attr("stroke-width", "0.3")
     .attr("class", "timeline-indicator")
     .attr("cx", vx(0))
-    .attr("cy", vy(0.44))
+    .attr("cy", vy(0.435))
     .attr("r", 0.5);
 
   svg.selectAll(".fade-until-end")

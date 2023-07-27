@@ -1,16 +1,21 @@
 function aggregate_dot_model(model) {
-    var months = [12, 9, 6, 3, 1];
+    /*originally we had bars for 1, 3, 6, 9, 12 months but
+    decided to go in a simpler direction*/
+    var months = [12];
     var r = {nowork:[]};
     months.forEach((month)=>{
       r[month] = [];
+    })
+    model.sort((a, b)=>{
+      return a.months_since_work - b.months_since_work
     })
     model.forEach((person)=> {
       if (person.months_since_work === -1) {
         r.nowork.push(person);
       } else {
-        var person_month = 12;
+        var person_month = "nowork"
         months.forEach((month)=>{
-          if (person.months_since_work < month) {
+          if (person.months_since_work <= month) {
             person_month = month
           }
         })
@@ -18,23 +23,19 @@ function aggregate_dot_model(model) {
       }
     })
     var x_loc = {
-        nowork: 0.1,
-        12: 0.3,
-        9: 0.45,
-        6: 0.6,
-        3: 0.75,
-        1: 0.9
+        nowork: 0.15,
+        12: 0.7
     };
-    var y = 0.75;
+    var y = 0.82;
     Object.keys(r).forEach((group)=>{
-        var x_off = -0.05, y_off = 0;
+        var x_off = -0.1, y_off = 0;
         r[group].forEach((person)=>{
             person.x_targ = x_loc[group] + x_off;
             person.y_targ = y + y_off;
-            if (x_off < 0.049) {
+            if (x_off < 0.124) {
                 x_off += 0.025
             } else {
-                x_off = -0.05;
+                x_off = -0.1;
                 y_off -= 0.025;
             }
         })

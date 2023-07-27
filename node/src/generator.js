@@ -7,16 +7,13 @@ just brute force it until we get a distribution that matches*/
 https://www.cbpp.org/74-percent-of-adults-potentially-subject-to-the-time-limit-work-in-year-before-or-after-receiving-1*/
 
 var targets = {
-    1: 0.51,
-    3: 0.59,
-    6: 0.63,
-    9: 0.68,
+    1: 0.55,
     12: 0.74
 }
 
 const n = 100
 
-const p_work = 0.51
+const p_work = 0.55
 const p_work_var = 0.2
 const p_switch = 0.15
 const p_switch_var = 0.05
@@ -65,7 +62,7 @@ function try_run() {
         person.work_in_month.push(
             Math.random() < person.p_work ? 1 : 0
         )
-        for (var month = 1; month < 12; month++) {
+        for (var month = 1; month < 24; month++) {
             var switches = Math.random() < person.p_switch
             if (switches) {
                 person.work_in_month.push(
@@ -96,7 +93,7 @@ function try_run() {
 
 function test(person) {
     var r = {};
-    var tests = [1, 3, 6, 9, 12]
+    var tests = [1, 12]
     tests.forEach((test)=>{
         var success = false;
         for (var j = 1; j <= test; j++) {
@@ -104,6 +101,7 @@ function test(person) {
         }
         r[test] = success;
     })
+    r.start_test = person.work_in_month[0]
     return r;
 }
 
@@ -120,6 +118,9 @@ for (var t = 0; t < 10000000; t++) {
 function is_good(agg) {
     var good = true;
     var errors = {};
+    if (Math.abs(agg.start_test - p_work) > 0.005) {
+        return false;
+    }
     Object.keys(targets).forEach((test)=>{
         if (Math.abs(agg[test] - targets[test]) > 0.005) {
             good = false;
