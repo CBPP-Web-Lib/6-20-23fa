@@ -1,10 +1,12 @@
 const fs = require("fs");
 
-/*in here we're going to try and generate artifical microdata that matches
+/*originally we were going to generate artifical microdata that matches
 this chart, assuming for each individual that likelihood of working
 and likelihood of moving in and out of work are normally distributed probabilities and
 just brute force it until we get a distribution that matches*/
 https://www.cbpp.org/74-percent-of-adults-potentially-subject-to-the-time-limit-work-in-year-before-or-after-receiving-1*/
+
+/*instead going to do the simpler two year 55/74 aggregates to match paper*/
 
 var targets = {
     1: 0.55,

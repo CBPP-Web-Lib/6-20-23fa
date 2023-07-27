@@ -23,8 +23,8 @@ function aggregate_dot_model(model) {
       }
     })
     var x_loc = {
-        nowork: 0.15,
-        12: 0.7
+        nowork: 0.22,
+        12: 0.77
     };
     var y = 0.82;
     Object.keys(r).forEach((group)=>{
