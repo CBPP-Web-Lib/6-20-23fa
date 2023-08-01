@@ -3,7 +3,7 @@ const sel = "#" + id
 
 const viewWidth = 90
 const viewMargin = 2
-const viewHeight = 100 / 1.8 - viewMargin * 2
+const viewHeight = 100 / 2.5 - viewMargin * 2
 
 const vx = function(x) {
   return x * viewWidth;

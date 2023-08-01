@@ -6,7 +6,7 @@ const data = parse_data(data_raw);
 function parse_data(d) {
   var r = [];
   d.forEach((person)=>{
-    var l = lpad(person.toString(2).split(""), 24);
+    var l = lpad(person.toString(2).split(""), 12);
     l.forEach((b, i) => {
       l[i]*=1;
     });

@@ -66,7 +66,7 @@ function try_run() {
         person.work_in_month.push(
             Math.random() < person.p_work ? 1 : 0
         )
-        for (var month = 1; month < 24; month++) {
+        for (var month = 1; month < 12; month++) {
             var switches = Math.random() < person.p_switch
             if (switches) {
                 person.work_in_month.push(
@@ -146,11 +146,11 @@ function write_data(people) {
 
 function to_byte(arr) {
     var val = 0;
-    if (arr.length !== 24) {
+    if (arr.length !== 12) {
         throw "bad array length";
     }
-    for (var i = 0; i <24; i++) {
-        val += Math.pow(2, 23 - i)*arr[i]
+    for (var i = 0; i <12; i++) {
+        val += Math.pow(2, 11 - i)*arr[i]
     }
     return val;
 }
