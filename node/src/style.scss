@@ -4,7 +4,8 @@ $yellow:#FFCE6D;
 
 #fa6-20-23 {
     max-width:580px;
-    margin-top:2em;
+    margin-top:3em;
+    margin-bottom:3em;
     //svg {background-color: $dark-blue;}
     border-top:1px solid #666;
     border-bottom:1px solid #666;
@@ -78,10 +79,16 @@ $yellow:#FFCE6D;
             display:inline-block;
             padding-left:10px;
             padding-right:10px;
+            p {
+                margin:0;
+                display:inline-block;
+            }
         } 
         .legend-circle {
             display:inline-block;
             vertical-align: middle;
+            position:relative;
+            top:-3px;
         }
         .legend-circle > svg {
             width:18px;
