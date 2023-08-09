@@ -8,6 +8,7 @@ import {
 import { select as d3_select } from "d3"
 
 function setup_svg() {
+  document.querySelector(sel + " .svg-container").innerHTML = "";
   var svg_el = d3_select(sel + " .svg-container").append("svg")
     .attr("xmlns", "http://www.w3.org/2000/svg")
     .attr("viewBox", [
