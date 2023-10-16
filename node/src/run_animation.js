@@ -211,10 +211,6 @@ function run_animation(svg) {
           .attr("x", x)
           .attr("y", y)
       })
-      setTimeout(resolve, 2100);
-    })
-  }).then(function() {
-    return new Promise((resolve) => {
       document.querySelector(sel).querySelectorAll(".s3").forEach((p) => {
         p.style.opacity = 1;
         p.style["font-weight"] = "bold";
@@ -222,6 +218,10 @@ function run_animation(svg) {
       document.querySelector(sel).querySelectorAll(".s2").forEach((p) => {
         p.style["font-weight"] = "normal";
       })
+      setTimeout(resolve, 2100);
+    })
+  }).then(function() {
+    return new Promise((resolve) => {
       setTimeout(resolve, 9000);
     })
   }).then(function() {
