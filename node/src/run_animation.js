@@ -215,6 +215,13 @@ function run_animation(svg) {
     })
   }).then(function() {
     return new Promise((resolve) => {
+      document.querySelector(sel).querySelectorAll(".s3").forEach((p) => {
+        p.style.opacity = 1;
+        p.style["font-weight"] = "bold";
+      })
+      document.querySelector(sel).querySelectorAll(".s2").forEach((p) => {
+        p.style["font-weight"] = "normal";
+      })
       setTimeout(resolve, 9000);
     })
   }).then(function() {
@@ -222,13 +229,15 @@ function run_animation(svg) {
       svg.style("opacity", 0);
       document.querySelector(sel).querySelectorAll(".s1, .s2, .s3").forEach((p) => {
         p.style.opacity = 0;
-        p.style["font-weight"] = "normal";
       })
       setTimeout(resolve, 200);
     })
   }).then(function() {
     return new Promise((resolve) => {
       svg.html(null);
+      document.querySelector(sel).querySelectorAll(".s1, .s2, .s3").forEach((p) => {
+        p.style["font-weight"] = "normal";
+      })
       svg.style("opacity", 1);
       setTimeout(resolve, 200);
     })
