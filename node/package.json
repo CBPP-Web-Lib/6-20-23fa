@@ -6,9 +6,9 @@
   "author": "Nick Kasprak",
   "license": "MIT",
   "dependencies": {
-    "cbpp_colorgen": "git+https://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:x-oauth-basic@github.com/CenterOnBudget/CBPP_Colorgen.git",
-    "cbpp_figure": "git+https://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:x-oauth-basic@github.com/CenterOnBudget/CBPP_Figure.git",
-    "cbpp_geojson_from_url": "git+https://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:x-oauth-basic@github.com/CenterOnBudget/cbpp_geojson_from_url.git",
+    "cbpp_colorgen": "github:CBPP-Web-Lib/CBPP_Colorgen.git",
+    "cbpp_figure": "github:CBPP-Web-Lib/CBPP_Figure.git",
+    "cbpp_geojson_from_url": "github:CBPP-Web-Lib/cbpp_geojson_from_url.git",
     "comma-number": "^2.0.1",
     "core-js": "^3.6.5",
     "csv": "^5.5.0",
