@@ -12,14 +12,14 @@ https://www.cbpp.org/74-percent-of-adults-potentially-subject-to-the-time-limit-
 
 var targets = {
     1: 0.55,
-    12: 0.74
+    12: 0.89
 }
 
 const n = 100
 
 const p_work = 0.55
 const p_work_var = 0.2
-const p_switch = 0.15
+const p_switch = 0.17
 const p_switch_var = 0.05
 
 /*https://stackoverflow.com/questions/12556685/is-there-a-javascript-implementation-of-the-inverse-error-function-akin-to-matl*/
@@ -122,6 +122,7 @@ for (var t = 0; t < 10000000; t++) {
 function is_good(agg) {
     var good = true;
     var errors = {};
+    console.log(agg.start_test - p_work);
     if (Math.abs(agg.start_test - p_work) > 0.005) {
         return false;
     }
