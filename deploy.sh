@@ -1,6 +1,7 @@
 rsync -av \
   -e "/usr/bin/ssh" \
-  ./html/ cbppapps@vps42437.dreamhostps.com:/home/cbppapps/apps.cbpp.org/6-20-23fa_rev4-28-25/
+  ./html/ cbppapps@apps.cbpp.org:/home/cbppapps/apps.cbpp.org/6-20-23fa_rev10-16-23/
+
 rsync -av \
   -e "/usr/bin/ssh" \
-  ./node/prod/ cbppapps@vps42437.dreamhostps.com:/home/cbppapps/apps.cbpp.org/6-20-23fa_rev4-28-25/js/
+  ./node/prod/ cbppapps@apps.cbpp.org:/home/cbppapps/apps.cbpp.org/6-20-23fa_rev10-16-23/js/
